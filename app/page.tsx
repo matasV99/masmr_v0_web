@@ -73,21 +73,6 @@ export default function LandingPage() {
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 the first R-native custom image processing pipeline for MERFISH
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                  asChild
-                >
-                  <a href="#installation">Get Started</a>
-                </Button>
-                <Button size="lg" variant="outline" className="flex items-center space-x-2 bg-transparent" asChild>
-                  <a href="https://eugenekwaneuromics.github.io/masmr/" target="_blank" rel="noopener noreferrer">
-                    <BookOpen className="w-4 h-4" />
-                    <span>Documentation</span>
-                  </a>
-                </Button>
-              </div>
             </div>
             <div className="flex justify-center lg:justify-end">
               <img
@@ -259,7 +244,7 @@ export default function LandingPage() {
               </a>
             </Card>
             <Card className="text-left hover:shadow-lg transition-shadow cursor-pointer" asChild>
-              <a href="/vignettes/spot-calling.html" target="_blank" rel="noreferrer">
+              <a href="/vignettes/spot-calling.nb.html" target="_blank" rel="noreferrer">
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <Target className="w-5 h-5" />
