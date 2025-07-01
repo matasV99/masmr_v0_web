@@ -1,303 +1,424 @@
-import Image from "next/image"
-import Link from "next/link"
-import { ArrowRight, Code, Github, Layers, Microscope, Package, Zap } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import {
+  Github,
+  BookOpen,
+  Package,
+  FileText,
+  BarChart3,
+  Grid3x3,
+  Code,
+  Target,
+  ImageIcon,
+  Scissors,
+  Layers,
+  HelpCircle,
+  Download,
+  Play,
+} from "lucide-react"
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Microscope className="h-6 w-6 text-primary" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <Code className="w-5 h-5 text-white" />
+            </div>
             <span className="text-xl font-bold">MASMR</span>
           </div>
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="#features" className="text-sm font-medium hover:text-primary">
+          <nav className="hidden md:flex items-center space-x-6">
+            <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
               Features
-            </Link>
-            <Link href="#documentation" className="text-sm font-medium hover:text-primary">
+            </a>
+            <a href="#documentation" className="text-gray-600 hover:text-gray-900 transition-colors">
               Documentation
-            </Link>
-            <Link href="#installation" className="text-sm font-medium hover:text-primary">
+            </a>
+            <a href="#vignettes" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Vignettes
+            </a>
+            <a href="#installation" className="text-gray-600 hover:text-gray-900 transition-colors">
               Installation
-            </Link>
-            <Link href="#examples" className="text-sm font-medium hover:text-primary">
-              Examples
-            </Link>
+            </a>
           </nav>
-          <div className="flex items-center gap-4">
-            <Link href="https://github.com/eugenekwaneuromics/masmr" target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="icon">
-                <Github className="h-4 w-4" />
-                <span className="sr-only">GitHub</span>
-              </Button>
-            </Link>
-            <Link href="https://eugenekwaneuromics.github.io/masmr/" target="_blank" rel="noopener noreferrer">
-              <Button>Documentation</Button>
-            </Link>
+          <div className="flex items-center space-x-3">
+            <Button variant="outline" className="flex items-center space-x-2 bg-transparent" asChild>
+              <a href="https://eugenekwaneuromics.github.io/masmr/" target="_blank" rel="noopener noreferrer">
+                <BookOpen className="w-4 h-4" />
+                <span>Documentation</span>
+              </a>
+            </Button>
+            <Button variant="outline" className="flex items-center space-x-2 bg-transparent" asChild>
+              <a href="https://github.com/eugenekwaNeuromics/masmr/" target="_blank" rel="noopener noreferrer">
+                <Github className="w-4 h-4" />
+                <span>GitHub</span>
+              </a>
+            </Button>
           </div>
         </div>
       </header>
-      <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    Modular Algorithms for Spotcalling in MERFISH in R
-                  </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    Build custom image processing pipelines with a focus on MERFISH decoding
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link href="#installation">
-                    <Button className="gap-1">
-                      Get Started <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Link href="https://eugenekwaneuromics.github.io/masmr/" target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline">View Documentation</Button>
-                  </Link>
-                </div>
+
+      {/* Hero Section */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-center lg:text-left">
+              <Badge variant="secondary" className="mb-4">
+                Open Source • R Package
+              </Badge>
+              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">MASMR</h1>
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                the first R-native custom image processing pipeline for MERFISH
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  asChild
+                >
+                  <a href="#installation">Get Started</a>
+                </Button>
+                <Button size="lg" variant="outline" className="flex items-center space-x-2 bg-transparent" asChild>
+                  <a href="https://eugenekwaneuromics.github.io/masmr/" target="_blank" rel="noopener noreferrer">
+                    <BookOpen className="w-4 h-4" />
+                    <span>Documentation</span>
+                  </a>
+                </Button>
               </div>
-              <Image
-                src="/placeholder.svg?height=600&width=600"
-                alt="MASMR visualization showing a colorful spiral pattern representing the package's capabilities"
-                width={600}
-                height={600}
-                className="mx-auto aspect-square overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
+            </div>
+            <div className="flex justify-center lg:justify-end">
+              <img
+                src="/masmr-hero-image.png"
+                alt="MASMR visualization showing the package's capabilities for MERFISH image processing"
+                className="max-w-full h-auto rounded-xl shadow-lg"
+                style={{ maxHeight: "500px" }}
               />
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Key Features</h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  MASMR provides a comprehensive toolkit for image processing and analysis in MERFISH data
-                </p>
+      {/* Features Section */}
+      <section id="features" className="py-20 px-4 bg-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Powerful Features</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Everything you need for advanced MERFISH image processing and analysis
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                  <Package className="w-6 h-6 text-blue-600" />
+                </div>
+                <CardTitle>R-based</CardTitle>
+                <CardDescription>
+                  Native R implementation designed specifically for the R ecosystem and workflows
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                  <FileText className="w-6 h-6 text-green-600" />
+                </div>
+                <CardTitle>User Friendly Syntax</CardTitle>
+                <CardDescription>
+                  Intuitive and readable code structure that makes complex image processing accessible
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                  <BarChart3 className="w-6 h-6 text-purple-600" />
+                </div>
+                <CardTitle>Advanced Quality Control Plots</CardTitle>
+                <CardDescription>
+                  Comprehensive visualization tools for monitoring and validating analysis results
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                  <Grid3x3 className="w-6 h-6 text-orange-600" />
+                </div>
+                <CardTitle>Modular Image Processing</CardTitle>
+                <CardDescription>
+                  Flexible pipeline architecture allowing custom combinations of processing modules
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Documentation Section */}
+      <section id="documentation" className="py-20 px-4 bg-slate-50">
+        <div className="container mx-auto max-w-6xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Comprehensive Documentation</h2>
+          <p className="text-lg text-gray-600 mb-8">
+            Complete guides covering every aspect of MERFISH analysis with MASMR
+          </p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="text-left">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Target className="w-5 h-5" />
+                  <span>Spot-calling Guide</span>
+                </CardTitle>
+                <CardDescription>
+                  Comprehensive guide to detecting and quantifying RNA spots with advanced algorithms
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-left">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <ImageIcon className="w-5 h-5" />
+                  <span>Image Processing</span>
+                </CardTitle>
+                <CardDescription>
+                  Step-by-step workflows for preprocessing, filtering, and enhancing MERFISH images
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-left">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Scissors className="w-5 h-5" />
+                  <span>Cell Segmentation</span>
+                </CardTitle>
+                <CardDescription>Methods for accurate cell boundary detection and single-cell analysis</CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-left">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Grid3x3 className="w-5 h-5" />
+                  <span>Stitching</span>
+                </CardTitle>
+                <CardDescription>
+                  Techniques for combining multiple field-of-view images into seamless mosaics
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-left">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Layers className="w-5 h-5" />
+                  <span>Synthesis</span>
+                </CardTitle>
+                <CardDescription>
+                  Advanced methods for integrating multi-round imaging data and gene expression analysis
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-left">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <HelpCircle className="w-5 h-5" />
+                  <span>Troubleshooting</span>
+                </CardTitle>
+                <CardDescription>
+                  Common issues, solutions, and best practices for optimal MERFISH analysis results
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Vignettes Section */}
+      <section id="vignettes" className="py-20 px-4 bg-white">
+        <div className="container mx-auto max-w-6xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Vignettes</h2>
+          <p className="text-lg text-gray-600 mb-8">Interactive tutorials and examples generated from R Markdown</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="text-left hover:shadow-lg transition-shadow cursor-pointer" asChild>
+              <a href="/vignettes/getting-ready.html" target="_blank" rel="noreferrer">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Play className="w-5 h-5" />
+                    <span>0: Getting Ready</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Essential setup and preparation steps before starting your MERFISH analysis
+                  </CardDescription>
+                </CardHeader>
+              </a>
+            </Card>
+            <Card className="text-left hover:shadow-lg transition-shadow cursor-pointer" asChild>
+              <a href="/vignettes/spot-calling.html" target="_blank" rel="noreferrer">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Target className="w-5 h-5" />
+                    <span>1: Spot Calling</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Complete walkthrough of RNA spot detection and quantification workflows
+                  </CardDescription>
+                </CardHeader>
+              </a>
+            </Card>
+            <Card className="text-left hover:shadow-lg transition-shadow cursor-pointer" asChild>
+              <a href="/vignettes/cell-segmentation.html" target="_blank" rel="noreferrer">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Scissors className="w-5 h-5" />
+                    <span>2: Cell Segmentation</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Step-by-step guide to cell boundary detection and single-cell analysis
+                  </CardDescription>
+                </CardHeader>
+              </a>
+            </Card>
+            <Card className="text-left hover:shadow-lg transition-shadow cursor-pointer" asChild>
+              <a href="/vignettes/stitching.html" target="_blank" rel="noreferrer">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Grid3x3 className="w-5 h-5" />
+                    <span>3: Stitching</span>
+                  </CardTitle>
+                  <CardDescription>Advanced techniques for combining multiple field-of-view images</CardDescription>
+                </CardHeader>
+              </a>
+            </Card>
+            <Card className="text-left hover:shadow-lg transition-shadow cursor-pointer" asChild>
+              <a href="/vignettes/synthesis.html" target="_blank" rel="noreferrer">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Layers className="w-5 h-5" />
+                    <span>4: Synthesis</span>
+                  </CardTitle>
+                  <CardDescription>Comprehensive guide to integrating multi-round imaging data</CardDescription>
+                </CardHeader>
+              </a>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Installation Section */}
+      <section id="installation" className="py-20 px-4 bg-slate-50">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Installation</h2>
+          <p className="text-lg text-gray-600 mb-8">Get started with MASMR in just one command</p>
+          <Card className="max-w-2xl mx-auto">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-center space-x-2">
+                <Download className="w-5 h-5" />
+                <span>Install from GitHub</span>
+              </CardTitle>
+              <CardDescription className="text-left">
+                <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mt-4">
+                  <code>devtools::install_github('eugenekwaNeuromics/masmr')</code>
+                </div>
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          <div className="mt-6 text-sm text-gray-600">
+            <p>
+              Make sure you have the <code className="bg-gray-200 px-2 py-1 rounded">devtools</code> package installed
+              first.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                  <Code className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xl font-bold">MASMR</span>
               </div>
+              <p className="text-gray-400">Advanced MERFISH image processing for R</p>
             </div>
-            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3 lg:gap-12">
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <Microscope className="h-6 w-6" />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold">Spotcalling</h3>
-                  <p className="text-muted-foreground">
-                    Advanced algorithms for precise spotcalling in MERFISH images with pre-processing, looping, and
-                    metrics analysis
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <Layers className="h-6 w-6" />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold">Image Processing</h3>
-                  <p className="text-muted-foreground">
-                    Modular building blocks for custom image processing pipelines with flexible function composition
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <Zap className="h-6 w-6" />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold">Cell Segmentation</h3>
-                  <p className="text-muted-foreground">
-                    Powerful tools for cell segmentation, model running, and mask saving for comprehensive spatial
-                    analysis
-                  </p>
-                </div>
-              </div>
+            <div>
+              <h3 className="font-semibold mb-4">Resources</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <a href="https://eugenekwaneuromics.github.io/masmr/" className="hover:text-white transition-colors">
+                    Documentation
+                  </a>
+                </li>
+                <li>
+                  <a href="#vignettes" className="hover:text-white transition-colors">
+                    Vignettes
+                  </a>
+                </li>
+                <li>
+                  <a href="#installation" className="hover:text-white transition-colors">
+                    Installation
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4">Development</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <a href="https://github.com/eugenekwaNeuromics/masmr/" className="hover:text-white transition-colors">
+                    GitHub
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/eugenekwaNeuromics/masmr/issues"
+                    className="hover:text-white transition-colors"
+                  >
+                    Issues
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/eugenekwaNeuromics/masmr/pulls"
+                    className="hover:text-white transition-colors"
+                  >
+                    Pull Requests
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4">Support</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Help Center
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Contact
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Bug Reports
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
-        </section>
-
-        <section id="documentation" className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-10 px-10 md:gap-16 lg:grid-cols-2">
-              <div className="space-y-4">
-                <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">Documentation</div>
-                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">Comprehensive Documentation</h2>
-                <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Our detailed documentation covers everything from installation to advanced usage, with examples and
-                  tutorials to get you started quickly.
-                </p>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link href="https://eugenekwaneuromics.github.io/masmr/" target="_blank" rel="noopener noreferrer">
-                    <Button className="gap-1">
-                      View Documentation <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="flex flex-col gap-1 rounded-lg border bg-card p-4 shadow-sm">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-primary">
-                    <Package className="h-4 w-4" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Installation Guide</h3>
-                  <p className="text-sm text-muted-foreground">Step-by-step instructions to get MASMR up and running</p>
-                </div>
-                <div className="flex flex-col gap-1 rounded-lg border bg-card p-4 shadow-sm">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-primary">
-                    <Code className="h-4 w-4" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Quick Start Scripts</h3>
-                  <p className="text-sm text-muted-foreground">Ready-to-use scripts to jumpstart your analysis</p>
-                </div>
-                <div className="flex flex-col gap-1 rounded-lg border bg-card p-4 shadow-sm">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-primary">
-                    <Layers className="h-4 w-4" />
-                  </div>
-                  <h3 className="text-lg font-semibold">API Reference</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Complete function documentation with parameters and examples
-                  </p>
-                </div>
-                <div className="flex flex-col gap-1 rounded-lg border bg-card p-4 shadow-sm">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-primary">
-                    <Microscope className="h-4 w-4" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Tutorials</h3>
-                  <p className="text-sm text-muted-foreground">In-depth guides for specific analysis workflows</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="installation" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Installation</h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Get started with MASMR in just a few steps
-                </p>
-              </div>
-            </div>
-            <div className="mx-auto max-w-3xl space-y-8 py-12">
-              <div className="rounded-lg border bg-card p-6 shadow-sm">
-                <h3 className="mb-4 text-xl font-semibold">Install from GitHub</h3>
-                <pre className="overflow-x-auto rounded-lg bg-muted p-4">
-                  <code className="text-sm font-mono">
-                    {`# Install devtools if you haven't already
-install.packages("devtools")
-
-# Install masmr from GitHub
-devtools::install_github("eugenekwaneuromics/masmr")
-
-# Load the package
-library(masmr)`}
-                  </code>
-                </pre>
-              </div>
-              <div className="flex justify-center">
-                <Link href="https://eugenekwaneuromics.github.io/masmr/" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline">View Full Installation Guide</Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="examples" className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Example Usage</h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  See how MASMR can be used in your MERFISH analysis workflow
-                </p>
-              </div>
-            </div>
-            <div className="mx-auto max-w-4xl space-y-8 py-12">
-              <div className="rounded-lg border bg-card p-6 shadow-sm">
-                <h3 className="mb-4 text-xl font-semibold">Basic Spotcalling Workflow</h3>
-                <pre className="overflow-x-auto rounded-lg bg-muted p-4">
-                  <code className="text-sm font-mono">
-                    {`# Load required libraries
-library(masmr)
-
-# Pre-process images
-processed_images <- preprocess_images(image_dir)
-
-# Run spotcalling
-spots <- run_spotcalling(processed_images, params)
-
-# Save results
-save_spot_calls(spots, output_dir)`}
-                  </code>
-                </pre>
-              </div>
-              <div className="flex justify-center">
-                <Link href="https://eugenekwaneuromics.github.io/masmr/" target="_blank" rel="noopener noreferrer">
-                  <Button>View More Examples</Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-primary/5">
-          <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
-            <div className="space-y-3">
-              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
-                Ready to enhance your MERFISH analysis?
-              </h2>
-              <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Get started with MASMR today and unlock powerful tools for your spatial transcriptomics research.
-              </p>
-            </div>
-            <div className="mx-auto flex flex-col gap-2 min-[400px]:flex-row justify-center">
-              <Link href="https://github.com/eugenekwaneuromics/masmr" target="_blank" rel="noopener noreferrer">
-                <Button className="gap-1">
-                  <Github className="h-4 w-4" /> View on GitHub
-                </Button>
-              </Link>
-              <Link href="https://eugenekwaneuromics.github.io/masmr/" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline">Read Documentation</Button>
-              </Link>
-            </div>
-          </div>
-        </section>
-      </main>
-      <footer className="w-full border-t py-6 md:py-0">
-        <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
-          <div className="flex items-center gap-2">
-            <Microscope className="h-5 w-5 text-primary" />
-            <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} MASMR. All rights reserved.</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link
-              href="https://github.com/eugenekwaneuromics/masmr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-muted-foreground hover:text-primary"
-            >
-              GitHub
-            </Link>
-            <Link
-              href="https://eugenekwaneuromics.github.io/masmr/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-muted-foreground hover:text-primary"
-            >
-              Documentation
-            </Link>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 MASMR. Open source software.</p>
           </div>
         </div>
       </footer>
