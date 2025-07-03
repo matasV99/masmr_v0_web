@@ -34,11 +34,11 @@ export default function LandingPage() {
             <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
               Features
             </a>
-            <a href="#documentation" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Documentation
-            </a>
             <a href="#vignettes" className="text-gray-600 hover:text-gray-900 transition-colors">
               Vignettes
+            </a>
+            <a href="#documentation" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Documentation
             </a>
             <a href="#installation" className="text-gray-600 hover:text-gray-900 transition-colors">
               Installation
@@ -148,87 +148,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Documentation Section */}
-      <section id="documentation" className="py-20 px-4 bg-slate-50">
-        <div className="container mx-auto max-w-6xl text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Comprehensive Documentation</h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Complete guides covering every aspect of MERFISH analysis with MASMR
-          </p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="text-left">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Target className="w-5 h-5" />
-                  <span>Spot-calling Guide</span>
-                </CardTitle>
-                <CardDescription>
-                  Comprehensive guide to detecting and quantifying RNA spots with advanced algorithms
-                </CardDescription>
-              </CardHeader>
-            </Card>
-            <Card className="text-left">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <ImageIcon className="w-5 h-5" />
-                  <span>Image Processing</span>
-                </CardTitle>
-                <CardDescription>
-                  Step-by-step workflows for preprocessing, filtering, and enhancing MERFISH images
-                </CardDescription>
-              </CardHeader>
-            </Card>
-            <Card className="text-left">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Scissors className="w-5 h-5" />
-                  <span>Cell Segmentation</span>
-                </CardTitle>
-                <CardDescription>Methods for accurate cell boundary detection and single-cell analysis</CardDescription>
-              </CardHeader>
-            </Card>
-            <Card className="text-left">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Grid3x3 className="w-5 h-5" />
-                  <span>Stitching</span>
-                </CardTitle>
-                <CardDescription>
-                  Techniques for combining multiple field-of-view images into seamless mosaics
-                </CardDescription>
-              </CardHeader>
-            </Card>
-            <Card className="text-left">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Layers className="w-5 h-5" />
-                  <span>Synthesis</span>
-                </CardTitle>
-                <CardDescription>
-                  Advanced methods for integrating multi-round imaging data and gene expression analysis
-                </CardDescription>
-              </CardHeader>
-            </Card>
-            <Card className="text-left">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <HelpCircle className="w-5 h-5" />
-                  <span>Troubleshooting</span>
-                </CardTitle>
-                <CardDescription>
-                  Common issues, solutions, and best practices for optimal MERFISH analysis results
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-        </div>
-      </section>
-
       {/* Vignettes Section */}
       <section id="vignettes" className="py-20 px-4 bg-white">
         <div className="container mx-auto max-w-6xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Vignettes</h2>
-          <p className="text-lg text-gray-600 mb-8">Interactive tutorials and examples generated from R Markdown</p>
+          <p className="text-lg text-gray-600 mb-8">Tutorials showing start to end custom image pipeline in Midbrain-like Organoids (MLOs)</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="text-left hover:shadow-lg transition-shadow cursor-pointer" asChild>
               <a href="/vignettes/getting-ready.html" target="_blank" rel="noreferrer">
@@ -264,7 +188,7 @@ export default function LandingPage() {
                     <span>2: Cell Segmentation</span>
                   </CardTitle>
                   <CardDescription>
-                    Step-by-step guide to cell boundary detection and single-cell analysis
+                    Step-by-step guide to cell boundary detection, and boundary dillation
                   </CardDescription>
                 </CardHeader>
               </a>
@@ -276,7 +200,7 @@ export default function LandingPage() {
                     <Grid3x3 className="w-5 h-5" />
                     <span>3: Stitching</span>
                   </CardTitle>
-                  <CardDescription>Advanced techniques for combining multiple field-of-view images</CardDescription>
+                  <CardDescription>Correcting for imaging overlap between adjacent fields-of-view (FOVs)</CardDescription>
                 </CardHeader>
               </a>
             </Card>
@@ -287,9 +211,85 @@ export default function LandingPage() {
                     <Layers className="w-5 h-5" />
                     <span>4: Synthesis</span>
                   </CardTitle>
-                  <CardDescription>Comprehensive guide to integrating multi-round imaging data</CardDescription>
+                  <CardDescription>Integrating multiple FOV images</CardDescription>
                 </CardHeader>
               </a>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Documentation Section */}
+      <section id="documentation" className="py-20 px-4 bg-slate-50">
+        <div className="container mx-auto max-w-6xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Comprehensive Documentation</h2>
+          <p className="text-lg text-gray-600 mb-8">
+            Complete guides covering every aspect of MERFISH analysis with MASMR
+          </p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="text-left">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Target className="w-5 h-5" />
+                  <span>Spot-calling Guide</span>
+                </CardTitle>
+                <CardDescription>
+                  Detecting and quantifying RNA spots with advanced algorithms
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-left">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <ImageIcon className="w-5 h-5" />
+                  <span>Image Processing</span>
+                </CardTitle>
+                <CardDescription>
+                  Building custom imaging pipelines for preprocessing, filtering, and enhancing MERFISH images
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-left">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Scissors className="w-5 h-5" />
+                  <span>Cell Segmentation</span>
+                </CardTitle>
+                <CardDescription>Methods for accurate cell boundary detection and integration with open source cell segmentation tools</CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-left">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Grid3x3 className="w-5 h-5" />
+                  <span>Stitching</span>
+                </CardTitle>
+                <CardDescription>
+                  Techniques for combining multiple field-of-view images into seamless mosaics
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-left">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Layers className="w-5 h-5" />
+                  <span>Synthesis</span>
+                </CardTitle>
+                <CardDescription>
+                  Advanced methods for integrating multi-round imaging data and gene expression analysis
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="text-left">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <HelpCircle className="w-5 h-5" />
+                  <span>Troubleshooting</span>
+                </CardTitle>
+                <CardDescription>
+                  Common issues, solutions, and best practices for optimal MERFISH analysis results
+                </CardDescription>
+              </CardHeader>
             </Card>
           </div>
         </div>
