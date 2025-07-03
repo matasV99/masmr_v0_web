@@ -154,15 +154,19 @@ export default function LandingPage() {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Vignettes</h2>
           <p className="text-lg text-gray-600 mb-8">Tutorials showing start to end custom image pipeline in Midbrain-like Organoids (MLOs)</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <a href="/vignettes/getting-ready.html" target="_blank" rel="noreferrer">
-              <Card className="text-left hover:shadow-lg transition-shadow cursor-pointer">
+            <Card className="text-left hover:shadow-lg transition-shadow cursor-pointer" asChild>
+              <a href="/vignettes/getting-ready.html" target="_blank" rel="noreferrer">
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
-                    {/* content */}
+                    <Play className="w-5 h-5" />
+                    <span>0: Getting Ready</span>
                   </CardTitle>
+                  <CardDescription>
+                    Essential setup and preparation steps before starting your MERFISH analysis
+                  </CardDescription>
                 </CardHeader>
-              </Card>
-            </a>
+              </a>
+            </Card>
             <Card className="text-left hover:shadow-lg transition-shadow cursor-pointer" asChild>
               <a href="/vignettes/spot-calling.nb.html" target="_blank" rel="noreferrer">
                 <CardHeader>
