@@ -1,14 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  output: 'export',
+  trailingSlash: true,
   images: {
-    unoptimized: true,
+    unoptimized: true
   },
+  basePath: '/masmr_v0_web',
+  assetPrefix: '/masmr_v0_web/',
 }
 
-export default nextConfig
+module.exports = nextConfig
