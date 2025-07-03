@@ -1,1 +1,316 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vignette 4: Synthesis</title>
+<style type="text/css">
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+}
+h1, h2, h3, h4, h5, h6 {
+  color: #2c3e50;
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+h1 {
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+code {
+  background-color: #f8f9fa;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+pre {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 5px;
+  padding: 15px;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+pre code {
+  background-color: transparent;
+  padding: 0;
+}
+.sourceCode {
+  background-color: #f8f9fa;
+}
+.r {
+  color: #d73027;
+}
+.output {
+  color: #4575b4;
+}
+blockquote {
+  border-left: 4px solid #3498db;
+  margin: 1em 0;
+  padding-left: 1em;
+  color: #666;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f2f2f2;
+}
+</style>
+</head>
+<body>
 
+<h1>Vignette 4: Synthesis - Integrating Multi-Round MERFISH Data</h1>
+
+<p>This vignette demonstrates how to integrate and synthesize data from multiple MERFISH imaging rounds using MASMR's synthesis capabilities.</p>
+
+<h2>Introduction</h2>
+
+<p>MERFISH experiments often involve multiple imaging rounds to detect large gene panels. The synthesis step combines data from all rounds, performs error correction, and generates the final gene expression matrix.</p>
+
+<h2>Loading Required Libraries</h2>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Load MASMR and dependencies</span>
+<span class="kw">library</span>(masmr)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(pheatmap)
+</code></pre>
+</div>
+
+<h2>Loading Multi-Round Data</h2>
+
+<p>Load data from multiple MERFISH imaging rounds:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Define paths to different imaging rounds</span>
+round_paths <span class="op">&lt;-</span> <span class="kw">c</span>(
+  <span class="st">"path/to/round1"</span>,
+  <span class="st">"path/to/round2"</span>,
+  <span class="st">"path/to/round3"</span>,
+  <span class="st">"path/to/round4"</span>
+)
+
+<span class="co"># Load multi-round MERFISH data</span>
+multi_round_data <span class="op">&lt;-</span> <span class="kw">load_multiround_data</span>(round_paths)
+
+<span class="co"># Inspect data structure</span>
+<span class="kw">str</span>(multi_round_data)
+</code></pre>
+</div>
+
+<h2>Codebook and Barcode Design</h2>
+
+<p>Load the MERFISH codebook that defines gene-barcode relationships:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Load MERFISH codebook</span>
+codebook <span class="op">&lt;-</span> <span class="kw">load_codebook</span>(<span class="st">"merfish_codebook.csv"</span>)
+
+<span class="co"># Visualize codebook structure</span>
+<span class="kw">head</span>(codebook)
+
+<span class="co"># Plot barcode design</span>
+<span class="kw">plot_codebook</span>(codebook)
+</code></pre>
+</div>
+
+<h2>Barcode Calling</h2>
+
+<p>Identify gene barcodes from multi-round spot data:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Load spots from all rounds</span>
+all_spots <span class="op">&lt;-</span> <span class="kw">load_all_round_spots</span>(multi_round_data)
+
+<span class="co"># Call barcodes based on spot patterns</span>
+barcodes <span class="op">&lt;-</span> <span class="kw">call_barcodes</span>(
+  all_spots,
+  codebook,
+  distance_threshold = <span class="fl">0.5</span>,
+  intensity_threshold = <span class="fl">0.1</span>
+)
+
+<span class="co"># View barcode calling summary</span>
+<span class="kw">summary</span>(barcodes)
+</code></pre>
+</div>
+
+<h2>Error Correction</h2>
+
+<p>Apply error correction to improve barcode accuracy:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Perform error correction</span>
+corrected_barcodes <span class="op">&lt;-</span> <span class="kw">error_correction</span>(
+  barcodes,
+  codebook,
+  max_hamming_distance = <span class="dv">1</span>,
+  min_intensity_ratio = <span class="fl">2.0</span>
+)
+
+<span class="co"># Compare before and after correction</span>
+correction_stats <span class="op">&lt;-</span> <span class="kw">compare_correction</span>(barcodes, corrected_barcodes)
+<span class="kw">print</span>(correction_stats)
+</code></pre>
+</div>
+
+<h2>Quality Control Metrics</h2>
+
+<p>Assess the quality of barcode calling and error correction:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Generate QC metrics</span>
+synthesis_qc <span class="op">&lt;-</span> <span class="kw">synthesis_quality_control</span>(corrected_barcodes, codebook)
+
+<span class="co"># Plot barcode detection efficiency</span>
+<span class="kw">ggplot</span>(synthesis_qc<span class="op">$</span>detection_efficiency, <span class="kw">aes</span>(x = gene, y = efficiency)) <span class="op">+</span>
+  <span class="kw">geom_bar</span>(stat = <span class="st">"identity"</span>) <span class="op">+</span>
+  <span class="kw">theme</span>(axis.text.x = <span class="kw">element_text</span>(angle = <span class="dv">45</span>, hjust = <span class="dv">1</span>)) <span class="op">+</span>
+  <span class="kw">labs</span>(title = <span class="st">"Gene Detection Efficiency"</span>)
+
+<span class="co"># Plot error correction rates</span>
+<span class="kw">plot</span>(synthesis_qc<span class="op">$</span>error_rates)
+</code></pre>
+</div>
+
+<h2>Spatial Registration</h2>
+
+<p>Register spots across imaging rounds for accurate synthesis:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Perform spatial registration</span>
+registered_data <span class="op">&lt;-</span> <span class="kw">spatial_registration</span>(
+  multi_round_data,
+  reference_round = <span class="dv">1</span>,
+  registration_method = <span class="st">"fiducial"</span>
+)
+
+<span class="co"># Assess registration quality</span>
+registration_qc <span class="op">&lt;-</span> <span class="kw">assess_registration</span>(registered_data)
+<span class="kw">plot</span>(registration_qc)
+</code></pre>
+</div>
+
+<h2>Gene Expression Matrix Generation</h2>
+
+<p>Create the final gene expression matrix:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Load cell segmentation results</span>
+cells <span class="op">&lt;-</span> <span class="kw">load_cell_boundaries</span>(<span class="st">"cell_boundaries.csv"</span>)
+
+<span class="co"># Assign corrected barcodes to cells</span>
+cell_gene_assignments <span class="op">&lt;-</span> <span class="kw">assign_genes_to_cells</span>(corrected_barcodes, cells)
+
+<span class="co"># Create expression matrix</span>
+expression_matrix <span class="op">&lt;-</span> <span class="kw">create_expression_matrix</span>(
+  cell_gene_assignments,
+  genes = codebook<span class="op">$</span>gene_name
+)
+
+<span class="co"># View matrix dimensions</span>
+<span class="kw">dim</span>(expression_matrix)
+</code></pre>
+</div>
+
+<h2>Data Visualization</h2>
+
+<p>Visualize the synthesized gene expression data:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Plot gene expression heatmap</span>
+top_genes <span class="op">&lt;-</span> <span class="kw">get_top_variable_genes</span>(expression_matrix, n = <span class="dv">50</span>)
+<span class="kw">pheatmap</span>(expression_matrix[, top_genes], 
+         scale = <span class="st">"row"</span>,
+         show_rownames = <span class="ot">FALSE</span>,
+         main = <span class="st">"Top Variable Genes"</span>)
+
+<span class="co"># Plot spatial gene expression</span>
+<span class="kw">plot_spatial_expression</span>(corrected_barcodes, <span class="st">"GAPDH"</span>)
+</code></pre>
+</div>
+
+<h2>Advanced Analysis</h2>
+
+<p>Perform advanced analysis on the synthesized data:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Calculate gene-gene correlations</span>
+gene_correlations <span class="op">&lt;-</span> <span class="kw">cor</span>(expression_matrix)
+
+<span class="co"># Identify co-expressed gene modules</span>
+gene_modules <span class="op">&lt;-</span> <span class="kw">find_gene_modules</span>(gene_correlations)
+
+<span class="co"># Perform dimensionality reduction</span>
+pca_result <span class="op">&lt;-</span> <span class="kw">prcomp</span>(expression_matrix, scale. = <span class="ot">TRUE</span>)
+<span class="kw">plot</span>(pca_result<span class="op">$</span>x[,<span class="dv">1</span>:<span class="dv">2</span>], main = <span class="st">"PCA of Single Cells"</span>)
+</code></pre>
+</div>
+
+<h2>Exporting Final Results</h2>
+
+<p>Export the synthesized and processed data:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Export final expression matrix</span>
+<span class="kw">write.csv</span>(expression_matrix, <span class="st">"final_expression_matrix.csv"</span>)
+
+<span class="co"># Export corrected barcodes</span>
+<span class="kw">write_barcodes</span>(corrected_barcodes, <span class="st">"corrected_barcodes.csv"</span>)
+
+<span class="co"># Export synthesis QC report</span>
+<span class="kw">export_synthesis_report</span>(synthesis_qc, <span class="st">"synthesis_qc_report.html"</span>)
+
+<span class="co"># Export gene modules</span>
+<span class="kw">write.csv</span>(gene_modules, <span class="st">"gene_modules.csv"</span>)
+</code></pre>
+</div>
+
+<h2>Conclusion</h2>
+
+<p>This vignette demonstrated the complete synthesis workflow in MASMR, from multi-round data integration to final gene expression matrix generation. The synthesis step is crucial for obtaining accurate, high-quality single-cell gene expression data from MERFISH experiments.</p>
+
+<h2>Session Information</h2>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="kw">sessionInfo</span>()
+</code></pre>
+</div>
+
+</body>
+</html>

@@ -1,1 +1,259 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vignette 2: Cell Segmentation</title>
+<style type="text/css">
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+}
+h1, h2, h3, h4, h5, h6 {
+  color: #2c3e50;
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+h1 {
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+code {
+  background-color: #f8f9fa;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+pre {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 5px;
+  padding: 15px;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+pre code {
+  background-color: transparent;
+  padding: 0;
+}
+.sourceCode {
+  background-color: #f8f9fa;
+}
+.r {
+  color: #d73027;
+}
+.output {
+  color: #4575b4;
+}
+blockquote {
+  border-left: 4px solid #3498db;
+  margin: 1em 0;
+  padding-left: 1em;
+  color: #666;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f2f2f2;
+}
+</style>
+</head>
+<body>
 
+<h1>Vignette 2: Cell Segmentation with MASMR</h1>
+
+<p>This vignette demonstrates how to perform cell segmentation for single-cell analysis in MERFISH data using MASMR.</p>
+
+<h2>Introduction</h2>
+
+<p>Cell segmentation is crucial for assigning RNA molecules to individual cells in MERFISH experiments. MASMR provides robust segmentation algorithms that work with various staining methods including DAPI and membrane markers.</p>
+
+<h2>Loading Required Libraries</h2>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Load MASMR and dependencies</span>
+<span class="kw">library</span>(masmr)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(dplyr)
+</code></pre>
+</div>
+
+<h2>Loading Data with Nuclear Staining</h2>
+
+<p>Load MERFISH data that includes nuclear (DAPI) staining:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Load MERFISH data with DAPI channel</span>
+data_path <span class="op">&lt;-</span> <span class="st">"path/to/merfish/data"</span>
+merfish_data <span class="op">&lt;-</span> <span class="kw">load_merfish_data</span>(data_path, include_dapi = <span class="ot">TRUE</span>)
+
+<span class="co"># Extract DAPI channel</span>
+dapi_image <span class="op">&lt;-</span> merfish_data<span class="op">$</span>dapi
+</code></pre>
+</div>
+
+<h2>Nuclear Segmentation</h2>
+
+<p>Start with nuclear segmentation using the DAPI channel:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Preprocess DAPI image</span>
+dapi_processed <span class="op">&lt;-</span> <span class="kw">preprocess_dapi</span>(
+  dapi_image,
+  gaussian_blur = <span class="fl">1.0</span>,
+  background_subtraction = <span class="ot">TRUE</span>
+)
+
+<span class="co"># Segment nuclei</span>
+nuclei <span class="op">&lt;-</span> <span class="kw">segment_nuclei</span>(
+  dapi_processed,
+  method = <span class="st">"watershed"</span>,
+  min_size = <span class="dv">100</span>,
+  max_size = <span class="dv">2000</span>
+)
+
+<span class="co"># View segmentation results</span>
+<span class="kw">plot_segmentation</span>(dapi_image, nuclei)
+</code></pre>
+</div>
+
+<h2>Cell Boundary Expansion</h2>
+
+<p>Expand nuclear boundaries to approximate cell boundaries:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Expand nuclei to cell boundaries</span>
+cells <span class="op">&lt;-</span> <span class="kw">expand_nuclei</span>(
+  nuclei,
+  expansion_distance = <span class="dv">10</span>,
+  method = <span class="st">"voronoi"</span>
+)
+
+<span class="co"># Visualize cell boundaries</span>
+<span class="kw">plot_cell_boundaries</span>(merfish_data<span class="op">$</span>image, cells)
+</code></pre>
+</div>
+
+<h2>Membrane-Based Segmentation</h2>
+
+<p>For more accurate cell boundaries, use membrane staining if available:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Load data with membrane marker</span>
+membrane_data <span class="op">&lt;-</span> <span class="kw">load_membrane_data</span>(data_path)
+
+<span class="co"># Segment using membrane information</span>
+membrane_cells <span class="op">&lt;-</span> <span class="kw">segment_cells_membrane</span>(
+  membrane_data,
+  nuclei_seeds = nuclei,
+  membrane_threshold = <span class="fl">0.1</span>
+)
+</code></pre>
+</div>
+
+<h2>Quality Control</h2>
+
+<p>Assess segmentation quality:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Generate segmentation QC metrics</span>
+seg_qc <span class="op">&lt;-</span> <span class="kw">segmentation_qc</span>(cells)
+
+<span class="co"># Plot cell size distribution</span>
+<span class="kw">ggplot</span>(seg_qc, <span class="kw">aes</span>(x = cell_area)) <span class="op">+</span>
+  <span class="kw">geom_histogram</span>(bins = <span class="dv">50</span>) <span class="op">+</span>
+  <span class="kw">labs</span>(title = <span class="st">"Cell Area Distribution"</span>)
+
+<span class="co"># Check for oversegmentation</span>
+<span class="kw">check_oversegmentation</span>(cells, nuclei)
+</code></pre>
+</div>
+
+<h2>Assigning Spots to Cells</h2>
+
+<p>Assign detected RNA spots to segmented cells:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Load previously detected spots</span>
+spots <span class="op">&lt;-</span> <span class="kw">load_spots</span>(<span class="st">"detected_spots.csv"</span>)
+
+<span class="co"># Assign spots to cells</span>
+cell_assignments <span class="op">&lt;-</span> <span class="kw">assign_spots_to_cells</span>(spots, cells)
+
+<span class="co"># Create single-cell expression matrix</span>
+expression_matrix <span class="op">&lt;-</span> <span class="kw">create_expression_matrix</span>(cell_assignments)
+</code></pre>
+</div>
+
+<h2>Single-Cell Analysis</h2>
+
+<p>Perform basic single-cell analysis:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Calculate basic statistics</span>
+cell_stats <span class="op">&lt;-</span> <span class="kw">calculate_cell_stats</span>(expression_matrix)
+
+<span class="co"># Plot genes per cell</span>
+<span class="kw">ggplot</span>(cell_stats, <span class="kw">aes</span>(x = genes_per_cell)) <span class="op">+</span>
+  <span class="kw">geom_histogram</span>(bins = <span class="dv">30</span>) <span class="op">+</span>
+  <span class="kw">labs</span>(title = <span class="st">"Genes Detected per Cell"</span>)
+
+<span class="co"># Plot total RNA per cell</span>
+<span class="kw">ggplot</span>(cell_stats, <span class="kw">aes</span>(x = total_rna)) <span class="op">+</span>
+  <span class="kw">geom_histogram</span>(bins = <span class="dv">30</span>) <span class="op">+</span>
+  <span class="kw">labs</span>(title = <span class="st">"Total RNA per Cell"</span>)
+</code></pre>
+</div>
+
+<h2>Exporting Results</h2>
+
+<p>Export segmentation and single-cell data:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Export cell boundaries</span>
+<span class="kw">write_cell_boundaries</span>(cells, <span class="st">"cell_boundaries.csv"</span>)
+
+<span class="co"># Export expression matrix</span>
+<span class="kw">write.csv</span>(expression_matrix, <span class="st">"single_cell_expression.csv"</span>)
+
+<span class="co"># Export cell statistics</span>
+<span class="kw">write.csv</span>(cell_stats, <span class="st">"cell_statistics.csv"</span>)
+</code></pre>
+</div>
+
+<h2>Conclusion</h2>
+
+<p>This vignette demonstrated cell segmentation workflows in MASMR, from nuclear segmentation to single-cell expression quantification. Proper segmentation is critical for accurate single-cell MERFISH analysis.</p>
+
+</body>
+</html>

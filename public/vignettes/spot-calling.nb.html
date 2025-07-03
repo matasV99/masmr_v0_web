@@ -1,1 +1,216 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vignette 1: Spot Calling</title>
+<style type="text/css">
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+}
+h1, h2, h3, h4, h5, h6 {
+  color: #2c3e50;
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+h1 {
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+code {
+  background-color: #f8f9fa;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+pre {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 5px;
+  padding: 15px;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+pre code {
+  background-color: transparent;
+  padding: 0;
+}
+.sourceCode {
+  background-color: #f8f9fa;
+}
+.r {
+  color: #d73027;
+}
+.output {
+  color: #4575b4;
+}
+blockquote {
+  border-left: 4px solid #3498db;
+  margin: 1em 0;
+  padding-left: 1em;
+  color: #666;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f2f2f2;
+}
+</style>
+</head>
+<body>
 
+<h1>Vignette 1: Spot Calling with MASMR</h1>
+
+<p>This vignette demonstrates how to perform RNA spot detection and quantification using MASMR's spot calling functionality.</p>
+
+<h2>Introduction</h2>
+
+<p>Spot calling is a critical step in MERFISH analysis where we identify and quantify individual RNA molecules in fluorescence microscopy images. MASMR provides robust algorithms for accurate spot detection with comprehensive quality control.</p>
+
+<h2>Loading Required Libraries</h2>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Load MASMR and dependencies</span>
+<span class="kw">library</span>(masmr)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(dplyr)
+</code></pre>
+</div>
+
+<h2>Loading MERFISH Data</h2>
+
+<p>First, we'll load our MERFISH imaging data:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Load example MERFISH data</span>
+data_path <span class="op">&lt;-</span> <span class="st">"path/to/your/merfish/data"</span>
+merfish_data <span class="op">&lt;-</span> <span class="kw">load_merfish_data</span>(data_path)
+
+<span class="co"># Inspect the data structure</span>
+<span class="kw">str</span>(merfish_data)
+</code></pre>
+</div>
+
+<h2>Image Preprocessing</h2>
+
+<p>Before spot calling, we need to preprocess the images to enhance signal quality:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Preprocess images</span>
+processed_data <span class="op">&lt;-</span> <span class="kw">preprocess_images</span>(
+  merfish_data,
+  background_subtraction = <span class="ot">TRUE</span>,
+  gaussian_filter = <span class="ot">TRUE</span>,
+  sigma = <span class="fl">1.0</span>
+)
+</code></pre>
+</div>
+
+<h2>Spot Calling</h2>
+
+<p>Now we can perform spot calling using MASMR's optimized algorithms:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Call spots with default parameters</span>
+spots <span class="op">&lt;-</span> <span class="kw">call_spots</span>(
+  processed_data,
+  threshold = <span class="fl">0.1</span>,
+  min_area = <span class="dv">3</span>,
+  max_area = <span class="dv">50</span>
+)
+
+<span class="co"># View summary of detected spots</span>
+<span class="kw">summary</span>(spots)
+</code></pre>
+</div>
+
+<h2>Quality Control</h2>
+
+<p>Quality control is essential to ensure reliable spot detection:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Generate QC plots</span>
+qc_plots <span class="op">&lt;-</span> <span class="kw">generate_spot_qc</span>(spots)
+
+<span class="co"># Display intensity distribution</span>
+<span class="kw">plot</span>(qc_plots<span class="op">$</span>intensity_dist)
+
+<span class="co"># Display spot size distribution</span>
+<span class="kw">plot</span>(qc_plots<span class="op">$</span>size_dist)
+</code></pre>
+</div>
+
+<h2>Advanced Spot Calling Parameters</h2>
+
+<p>For more control over spot detection, you can adjust various parameters:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Advanced spot calling with custom parameters</span>
+advanced_spots <span class="op">&lt;-</span> <span class="kw">call_spots</span>(
+  processed_data,
+  method = <span class="st">"log"</span>,
+  threshold = <span class="fl">0.05</span>,
+  min_area = <span class="dv">2</span>,
+  max_area = <span class="dv">100</span>,
+  sigma_range = <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">2.0</span>),
+  overlap_threshold = <span class="fl">0.5</span>
+)
+</code></pre>
+</div>
+
+<h2>Exporting Results</h2>
+
+<p>Finally, export your spot calling results for downstream analysis:</p>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Export spots to CSV</span>
+<span class="kw">write_spots</span>(spots, <span class="st">"detected_spots.csv"</span>)
+
+<span class="co"># Export QC report</span>
+<span class="kw">export_qc_report</span>(qc_plots, <span class="st">"spot_calling_qc.html"</span>)
+</code></pre>
+</div>
+
+<h2>Conclusion</h2>
+
+<p>This vignette demonstrated the basic workflow for spot calling in MASMR. The package provides flexible parameters and comprehensive quality control to ensure accurate RNA quantification in your MERFISH experiments.</p>
+
+<h2>Session Information</h2>
+
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">
+<span class="kw">sessionInfo</span>()
+</code></pre>
+</div>
+
+</body>
+</html>
